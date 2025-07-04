@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 export default function WaselApp() {
   const [rides, setRides] = useState([]);
   const [form, setForm] = useState({ location: '', destination: '', seats: '', isZakaah: false });
   const [search, setSearch] = useState({ location: '', destination: '' });
+  const [error, setError] = useState(null);
 
   const fetchRides = async () => {
-    const response = await axios.get('http://localhost:3001/rides');
-    setRides(response.data);
+    try {
+      const response = await axios.get(`${API_BASE_URL}/rides`);
+      const data = response.data;
+      if (Array.isArray(data)) {
+        setRides(data);
+        setError(null);
+      } else {
+        throw new Error('Response is not an array');
+      }
+    } catch (err) {
+      setError('Failed to fetch rides');
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -16,14 +30,28 @@ export default function WaselApp() {
   }, []);
 
   const handlePost = async () => {
-    await axios.post('http://localhost:3001/rides', form);
-    setForm({ location: '', destination: '', seats: '', isZakaah: false });
-    fetchRides();
+    try {
+      await axios.post(`${API_BASE_URL}/rides`, form);
+      setForm({ location: '', destination: '', seats: '', isZakaah: false });
+      fetchRides();
+    } catch (err) {
+      setError('Failed to post ride');
+    }
   };
 
   const handleSearch = async () => {
-    const res = await axios.get('http://localhost:3001/search', { params: search });
-    setRides(res.data);
+    try {
+      const res = await axios.get(`${API_BASE_URL}/search`, { params: search });
+      const data = res.data;
+      if (Array.isArray(data)) {
+        setRides(data);
+        setError(null);
+      } else {
+        throw new Error('Search result is not an array');
+      }
+    } catch (err) {
+      setError('Failed to search rides');
+    }
   };
 
   return (
@@ -51,14 +79,19 @@ export default function WaselApp() {
 
       <div>
         <h2 className="font-semibold mb-2">Available Rides</h2>
-        {rides.map(ride => (
-          <div key={ride.id} className="border rounded p-2 mb-2">
-            <p><strong>From:</strong> {ride.location}</p>
-            <p><strong>To:</strong> {ride.destination}</p>
-            <p><strong>Seats:</strong> {ride.seats}</p>
-            {ride.isZakaah && <span className="text-green-600">Zakaah Ride 🌟</span>}
-          </div>
-        ))}
+        {error && <p className="text-red-600 mb-2">{error}</p>}
+        {Array.isArray(rides) && rides.length > 0 ? (
+          rides.map(ride => (
+            <div key={ride.id} className="border rounded p-2 mb-2">
+              <p><strong>From:</strong> {ride.location}</p>
+              <p><strong>To:</strong> {ride.destination}</p>
+              <p><strong>Seats:</strong> {ride.seats}</p>
+              {ride.isZakaah && <span className="text-green-600">Zakaah Ride 🌟</span>}
+            </div>
+          ))
+        ) : (
+          <p>No rides available.</p>
+        )}
       </div>
     </div>
   );
