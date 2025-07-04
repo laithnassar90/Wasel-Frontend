@@ -1,19 +1,29 @@
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const express = require("express");
-const cors = require("cors");
-
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-app.use(cors());
-app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  res.send("Wasel backend is running");
+// Serve static frontend build files:
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// Backend API example:
+app.get('/api/hello', (req, res) => {
+  res.json({ message: 'Hello from backend!' });
 });
 
-app.use("/api", require("./routes/auth"));
-app.use("/api/vehicles", require("./routes/vehicles"));
-app.use("/api/bookings", require("./routes/bookings"));
-app.use("/api", require("./routes/users"));
+// Catch-all: serve index.html so frontend handles client-side routes:
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
+});
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+
+
+
+ 
