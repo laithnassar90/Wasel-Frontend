@@ -1,29 +1,25 @@
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
+const express = require('express');
+const path = require('path');
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 
-// Serve static frontend build files:
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+app.use(express.json());
 
-// Backend API example:
+// Test API route
 app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello from backend!' });
+  res.json({ message: 'Hello from Wasel backend' });
 });
 
-// Catch-all: serve index.html so frontend handles client-side routes:
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
-});
-
-app.listen(PORT, () => {
+// Start server with error handling
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-
-
-
- 
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. Try changing the port or killing the process using it.`);
+  } else {
+    console.error('Server error:', err);
+  }
+});
