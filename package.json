@@ -1,57 +1,16 @@
 {
+  "name": "wasel-frontend",
+  "version": "1.0.0",
+  "private": true,
   "dependencies": {
- 
-    "cors": "^2.8.5",
-    "express": "^5.1.0"
-  },
-  
-  "devDependencies": {
-    "@babel/plugin-transform-react-jsx": "^7.27.1",
-    "postcss-selector-parser": "^7.1.0",
-    "typescript": "^5.8.3"
- 
-    "axios": "^1.6.0",
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1"
   },
-  
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "start": "vite preview"
-  },
-
-"scripts": {
-  "start": "react-scripts start",
-  "build": "react-scripts build",
-  "test": "react-scripts test",
-  "eject": "react-scripts eject"
-}
-
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@csstools/selector-specificity": "^5.0.0",
-    "@rollup/plugin-commonjs": "^28.0.6",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@vitejs/plugin-react": "^4.6.0",
-    "postcss": "^8.5.6",
-    "rollup": "^4.44.1",
-    "vite": "^7.0.0"
-  d6cd3ace63f8bd8988900863a3b2f67933644b2a
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   }
 }
